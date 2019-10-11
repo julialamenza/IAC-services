@@ -1,0 +1,20 @@
+---
+- name: deployapp app directories
+  file: dest={{ item }} state=directory owner=www-data group=ubuntu mode=0775
+  with_items:
+    - /var/www
+    - /var/log/{{ service_name }}
+
+- name: deployapp unarchive app
+  unarchive:
+    src: /tmp/{{ service_name }}.tar.gz
+    dest: /var/www
+    owner: ubuntu
+    group: ubuntu
+    copy: no
+
+- name: fix files owners
+  file: path={{ item }} owner=www-data group=ubuntu recurse=yes
+  with_items:
+    - /var/www/
+    - /var/log/{{ service_name }}

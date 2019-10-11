@@ -1,0 +1,44 @@
+---
+- name: Download Graylog Repo Deb
+  get_url:
+    url: "https://packages.graylog2.org/repo/packages/graylog-{{graylog_major_version}}-repository_latest.deb"
+    dest: /root/graylog-repo.deb
+    force: yes
+
+- name: Install Graylog Repo
+  apt:
+    deb: /root/graylog-repo.deb
+    state: present
+
+- name: Install Graylog server
+  apt:
+    name: graylog-server
+    state: latest
+    update_cache: yes
+  notify: restart graylog-server
+
+- name: Add Graylog server config for versions < 3
+  template:
+    src: server.conf.j2
+    dest: /etc/graylog/server/server.conf
+  when: graylog_major_version is version('3.0', '<')
+  notify: restart graylog-server
+
+- name: Add Graylog server config for versions >= 3
+  template:
+    src: server-3.conf.j2
+    dest: /etc/graylog/server/server.conf
+  when: graylog_major_version is version('3.0', '>=')
+  notify: restart graylog-server
+
+- name: Copy graylog extra plugins into plugin dir to be loaded on graylog start
+  get_url:
+    url: "{{ item }}"
+    dest: "{{ graylog_plugin_dir }}/"
+  with_items: "{{ graylog_custom_plugins }}"
+  notify: restart graylog-server
+
+- name: Enable graylog-server on boot
+  service:
+    name: graylog-server
+    enabled: yes

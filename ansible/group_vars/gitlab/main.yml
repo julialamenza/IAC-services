@@ -1,0 +1,19 @@
+---
+gitlab_external_url: "__EXTERNAL_URL__"
+gitlab_git_data_dir: "/var/opt/gitlab/git-data"
+gitlab_backup_path: "/var/opt/gitlab/backups"
+gitlab_edition: "gitlab-ee"
+gitlab_version: "11.6.3-ee.0"
+
+gitlab_not_enabled: "true"
+
+gitlab_external_database: "true"
+gitlab_database_host: "__DATABASE_HOST__"
+gitlab_database_port: "__DATABASE_PORT__"
+gitlab_database_username: "__DATABASE_USERNAME__"
+gitlab_database_password: "__DATABASE_PASSWORD__"
+
+gitlab_external_cache: "false"
+gitlab_cache_host: "__CACHE_HOST__"
+gitlab_cache_port: "__CACHE_PORT__"
+gitlab_cache_password: "__CACHE_PASSWORD__"

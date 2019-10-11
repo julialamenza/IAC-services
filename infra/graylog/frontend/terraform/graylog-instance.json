@@ -1,0 +1,27 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "VisualEditor0",
+        "Effect": "Allow",
+        "Action": [
+          "cloudwatch:PutMetricData",
+          "dynamodb:CreateTable",
+          "dynamodb:DescribeTable",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:Scan",
+          "dynamodb:UpdateItem",
+          "ec2:DescribeInstances",
+          "ec2:DescribeNetworkInterfaceAttribute",
+          "ec2:DescribeNetworkInterfaces",
+          "elasticloadbalancing:DescribeLoadBalancerAttributes",
+          "elasticloadbalancing:DescribeLoadBalancers",
+          "kinesis:GetRecords",
+          "kinesis:GetShardIterator",
+          "kinesis:ListShards"
+        ],
+        "Resource": "*"
+      }
+    ]
+  }

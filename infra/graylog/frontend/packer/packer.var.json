@@ -1,0 +1,8 @@
+{
+    "template": "ubuntu-bionic",
+    "role": "app",
+    "service": "graylog",
+    "packages_dir": "../../../../../packages",
+    "playbook_file": "../../../../ansible/playbooks/graylog.yml",
+    "inventory_groups": "graylog"
+  }

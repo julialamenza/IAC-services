@@ -1,0 +1,49 @@
+variable "corum_root_domain"                             { default = "corum.fr" }
+variable "corum_root_domain_zone_id"                     { default = "Z1S1FMU62SMQIM" }
+variable "corum_root_domain_env"                         { default = "prod" }
+variable "root_external_domain" {}
+variable "root_internal_domain" {}
+
+
+data "aws_route53_zone" "corum_main" {
+    count       = "${ var.stage == var.corum_root_domain_env ? 1 : 0 }"
+    zone_id     = "${var.corum_root_domain_zone_id}"
+}
+
+# Delegated environment subdomain zone
+resource "aws_route53_zone" "corum_delegated_subdomain_zone" {
+    name        = "${var.stage}.${var.root_external_domain}"
+    tags {
+        Environment = "${var.stage}"
+    }
+}
+
+# Delegate dev subdomain to main zone
+resource "aws_route53_record" "corum_self_subdomain_delegation" {
+    count       = "${ var.stage == var.corum_root_domain_env ? 1 : 0 }"
+    zone_id     = "${data.aws_route53_zone.corum_main.zone_id}"
+    name        = "${var.stage}.${var.root_external_domain}"
+    type        = "NS"
+    ttl         = "30"
+    records     = [
+        "${aws_route53_zone.corum_delegated_subdomain_zone.name_servers.0}",
+        "${aws_route53_zone.corum_delegated_subdomain_zone.name_servers.1}",
+        "${aws_route53_zone.corum_delegated_subdomain_zone.name_servers.2}",
+        "${aws_route53_zone.corum_delegated_subdomain_zone.name_servers.3}"
+    ]
+}
+
+resource "aws_route53_zone" "private" {
+    name = "${var.stage}.${var.root_internal_domain}"
+    vpc {
+        vpc_id = "${module.vpc.vpc_id}"
+    }
+}
+
+output "corum_host_zone"             { value = "${aws_route53_zone.corum_delegated_subdomain_zone.id}" }
+output "public_corum_domain_name"    { value = "${var.stage}.${var.root_external_domain}" }
+
+output "private_host_zone"              { value = "${aws_route53_zone.private.id}" }
+output "public_host_zone"               { value = "${aws_route53_zone.corum_delegated_subdomain_zone.id}" }
+output "private_domain_name"            { value = "${aws_route53_zone.private.name}" }
+output "public_domain_name"             { value = "${aws_route53_zone.corum_delegated_subdomain_zone.name}"}

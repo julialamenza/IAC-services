@@ -1,0 +1,8 @@
+{
+    "template": "ubuntu-bionic-app",
+    "role": "app",
+    "service": "drupal",
+    "packages_dir": "../../../../../packages",
+    "playbook_file": "../../../../ansible/playbooks/drupal.yml",
+    "inventory_groups": "drupal"
+  }

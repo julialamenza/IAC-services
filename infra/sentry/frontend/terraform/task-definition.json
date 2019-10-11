@@ -1,0 +1,37 @@
+[
+  {
+    "cpu": 0,
+    "essential": true,
+    "image": "${image_url}",
+    "memoryReservation": 1512,
+    "name": "${container_name}",
+    "portMappings": [
+      {
+        "containerPort": 9000
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${log_group_name}",
+        "awslogs-region": "${log_group_region}"
+      }
+    },
+    "command": [ "run", "web"],
+    "environment": [
+      { "name" : "SENTRY_DB_NAME", "value" : "${db_name}" },
+      { "name" : "SENTRY_DB_USER", "value" : "${db_user}" },
+      { "name" : "SENTRY_DB_PASSWORD", "value" : "${db_password}" },
+      { "name" : "SENTRY_POSTGRES_HOST", "value" : "${db_host}" },
+      { "name" : "SENTRY_EMAIL_HOST", "value" : "${email_host}"},
+      { "name" : "SENTRY_EMAIL_PORT", "value" : "465"},
+      { "name" : "SENTRY_EMAIL_USER", "value" : "AKIAVVIWN2QWYUFRYZ44"},
+      { "name" : "SENTRY_EMAIL_PASSWORD", "value" : "BMyFhD6iHvag9GiPYQ6zxRrIbvYDt3UPu5/2yOd5p7EF"},
+      { "name" : "SENTRY_USE_TLS", "value" : "true"},
+      { "name" : "SENTRY_SERVER_EMAIL", "value" : "sentry@corum.sh"},
+      { "name" : "SENTRY_FILESTORE_BUCKET_NAME", "value" : "corum-sentry" },
+      { "name" : "SENTRY_REDIS_HOST", "value" : "${redis_host}" },
+      { "name" : "SENTRY_SECRET_KEY", "value" : "59kq)7*1tprkacevs%(&zr=5u&&dw_z6a!lq7td7e!gbi5uxou" }
+    ]
+  }
+]

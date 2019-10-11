@@ -1,0 +1,73 @@
+{
+    "variables": {
+      "role": null,
+      "service": null,
+      "branch": null,
+      "playbook_file": null,
+      "inventory_groups": null,
+      "region": "eu-west-3",
+      "vpc_id": "vpc-0d430e4b692586671",
+      "subnet_id": "subnet-007276ded42d0b0b6",
+      "source_ami": "ami-074f4c146d4f5d466",
+      "instance_type": "t3.medium",
+      "shared_account": "389278454829"
+    },
+    "builders": [
+      {
+        "type": "amazon-ebs",
+        "region": "{{ user `region` }}",
+        "source_ami": "{{ user `source_ami` }}",
+        "instance_type": "{{ user `instance_type` }}",
+        "ssh_pty": true,
+        "ssh_username": "ubuntu",
+        "ami_name": "{{ user `service` }}-{{ user `role` }}-{{ isotime \"2006-01-02T15-04-05\" }}",
+        "ami_description": "ubuntu-{{ user `service` }}-{{ user `role` }}",
+        "vpc_id": "{{ user `vpc_id` }}",
+        "subnet_id": "{{ user `subnet_id` }}",
+        "ami_users": "{{ user `shared_account` }}",
+        "associate_public_ip_address": true,
+        "tags": {
+          "Name": "{{ user `service` }}-{{ user `role` }}",
+          "Source AMI":"{{ user `source_ami` }}"
+        },
+        "run_tags": {
+          "Name": "Packer Builder {{ user `service` }}"
+        }
+      },
+      {
+        "type": "vagrant",
+        "source_path": "ubuntu/bionic64",
+        "provider": "virtualbox",
+        "communicator": "ssh",
+        "skip_package": true,
+        "template": "{{ template_dir }}/virtualbox.conf"
+      }
+    ],
+    "provisioners": [
+      {
+        "type": "shell",
+        "inline": ["sleep 20"],
+        "only": ["amazon-ebs"]
+      },
+      {
+        "type": "shell",
+        "scripts": ["{{ template_dir }}/../scripts/bootstrap.sh"]
+      },
+      {
+        "type": "file",
+        "source": "{{ user `packages_dir` }}/{{ user `branch` }}/{{ user `service` }}.tar.gz",
+        "destination": "/tmp/{{ user `service` }}.tar.gz"
+      },
+      {
+        "type": "ansible-local",
+        "playbook_file": "{{ user `playbook_file` }}",
+        "playbook_dir": "{{ template_dir }}/../../ansible",
+        "inventory_groups": "{{ user `inventory_groups` }}",
+        "extra_arguments": [ "--extra-vars \"SERVICE={{ user `service` }} BRANCH={{ user `branch` }}\"" ]
+      },
+      {
+        "type": "shell",
+        "scripts": ["{{ template_dir }}/../scripts/cleanup.sh"]
+      }
+    ]
+  }

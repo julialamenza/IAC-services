@@ -1,0 +1,31 @@
+[
+  {
+    "cpu": 500,
+    "essential": true,
+    "image": "${image_url}",
+    "memory": 1512,
+    "name": "${container_name}",
+    "portMappings": [
+      {
+        "containerPort": 80
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${log_group_name}",
+        "awslogs-region": "${log_group_region}"
+      }
+    },
+    "environment": [
+      { "name" : "DB_NAME", "value" : "${db_name}" },
+      { "name" : "DB_USER", "value" : "${db_user}" },
+      { "name" : "DB_PASSWORD", "value" : "${db_password}" },
+      { "name" : "DB_HOST", "value" : "${db_host}" },
+      { "name" : "DB_PREFIX", "value" : "${db_prefix}" },
+      { "name" : "WP_ENV", "value" : "${wp_env}" },
+      { "name" : "WP_HOME", "value" : "${wp_home}" },
+      { "name" : "WP_SITEURL", "value" : "${wp_siteurl}" }
+    ]
+  }
+]

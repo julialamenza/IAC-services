@@ -1,0 +1,16 @@
+---
+# handlers 
+- name: restart graylog-server
+  service:
+    name: graylog-server
+    state: restarted
+
+- name: stop graylog-server
+  service:
+    name: graylog-server
+    state: stopped
+
+- name: start graylog-server
+  service:
+    name: graylog-server
+    state: stopped

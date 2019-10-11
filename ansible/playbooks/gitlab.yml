@@ -1,0 +1,11 @@
+---
+- name: Gitlab
+  remote_user: ubuntu
+  become: yes
+  become_user: root
+  become_method: sudo
+  hosts: localhost
+  vars:
+    service_name: "{{ SERVICE }}"
+  roles:
+    - gitlab

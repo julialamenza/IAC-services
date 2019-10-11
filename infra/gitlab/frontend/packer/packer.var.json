@@ -1,0 +1,8 @@
+{
+    "template": "ubuntu-bionic",
+    "role": "app",
+    "service": "gitlab",
+    "packages_dir": "../../../../../packages",
+    "playbook_file": "../../../../ansible/playbooks/gitlab.yml",
+    "inventory_groups": "gitlab"
+  }

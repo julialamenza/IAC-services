@@ -1,0 +1,38 @@
+# Basic server settings
+graylog_server_version:     "3.0.1-1" # Optional, if not provided the latest version will be installed
+graylog_is_master:          "True"
+graylog_password_secret:    "2jueVqZpwLLjaWxV" # generate with: pwgen -s 96 1
+graylog_root_password_sha2: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" # generate with: echo -n yourpassword | shasum -a 256
+graylog_root_user_email:    "graylog@corum.sh"
+graylog_http_external_uri: "http://graylog.sh:9000/"
+graylog_elasticsearch_hosts: ""
+graylog_mongodb_uri: "mongodb://graylog:vWGzncmBe9@10.150.1.254:27017/graylog"
+graylog_retention_weeks:   "1"
+
+# Mail
+graylog_transport_email_enabled:           true
+graylog_transport_email_hostname:          ""
+graylog_transport_email_port:              587
+graylog_transport_email_use_auth:          True
+graylog_transport_email_use_tls:           True
+graylog_transport_email_use_ssl:           false
+graylog_transport_email_auth_username:     ""
+graylog_transport_email_auth_password:     "/"
+graylog_transport_email_subject_prefix:    "[graylog]"
+graylog_transport_email_from_email:        "graylog@"
+
+# Nginx
+nginx_vhosts:
+  - listen: "80"
+    state: "present"
+    template: "{{ nginx_vhost_template }}"
+    filename: "graylog.conf"
+    server_name: "graylog.sh"
+    extra_parameters: |
+      location / {
+        proxy_pass         http://127.0.0.1:9000/;
+        proxy_set_header   Host                  $host;
+        proxy_set_header   X-Real-IP             $remote_addr;
+        proxy_set_header   X-Forwarded-For       $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Host      $host;
+        proxy_set_header   X-Forwarded-Server    $host; }
