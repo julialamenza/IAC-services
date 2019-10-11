@@ -5,7 +5,7 @@ env                           = "dev"
 
 ######################## Remote States vars ####################################
 
-state_bucket                  = "corum-ux-tfstates-dev"
+state_bucket                  = "bucket-name"
 vpc_state_key                 = "vpc/dev"
 
 ######################## Instances vars ########################################
@@ -24,7 +24,7 @@ role                          = "database"
 
 
 rds_username = "worpress"
-rds_password = "corum2019"
+rds_password = "password-name"
 rds_port = "3306"
 rds_db_name = "worpress"
 rds_engine = "mysql"

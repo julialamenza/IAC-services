@@ -2,12 +2,12 @@
 
 region                        = "eu-west-3"
 env                           = "dev"
-key_name                      = "corum-ux-dev"
+key_name                      = "kwy-name"
 
 
 ######################## Remote States vars ####################################
 
-state_bucket                  = "corum-ux-tfstates-dev"
+state_bucket                  = "bucket-name"
 vpc_state_key                 = "vpc/dev"
 backend_state_key             = "wordpress/backend/dev"
 
